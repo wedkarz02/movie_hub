@@ -1,0 +1,11 @@
+{% extends "hub/base.html" %}
+
+{% block content %}
+    <h1>Hello world</h1>
+    <p>This page has been visited {{ counter.num }} times</p>
+    {% with ''|center:100 as range %}
+    {% for _ in range %}
+        <p>dupa</p>
+    {% endfor %}
+    {% endwith %}
+{% endblock content %}
