@@ -1,0 +1,13 @@
+{% extends "hub/base.html" %}
+
+{% block content %}
+    <h1>Movies</h1>
+    {% for movie in movies %}
+        <div class="mt-5">
+            <h3>{{ movie.title }}</h3>
+            <p>{{ movie.description }}</p>
+            <p>{{ movie.year }}</p>
+            <p>{{ movie.updated_at }}</p>
+        </div>
+    {% endfor %}
+{% endblock content %}
