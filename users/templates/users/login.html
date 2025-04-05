@@ -6,7 +6,7 @@
     <div class="col-md-6">
         <div class="card bg-white">
             <div class="card-header bg-dark text-white">
-                Register Form
+                Login Form
             </div>
             <div class="card-body">
                 <form method="POST">
@@ -14,11 +14,11 @@
                     <fieldset>
                         {{ form|crispy }}
                     </fieldset>
-                    <button type="submit" class="btn btn-dark">Register</button>
+                    <button type="submit" class="btn btn-dark">Login</button>
                 </form>
                 <div class="border-top bg-white mt-3">
                     <small class="text-muted">
-                        Already have an account? <a class="ml-2" href="{% url 'login' %}">Sigh in</a>
+                        Don't have an account yet? <a class="ml-2" href="{% url 'register' %}">Sigh up</a>
                     </small>
                 </div>
             </div>

@@ -9,8 +9,9 @@ def register(req):
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get("username")
-            messages.success(req, f"Account created for {username}")
-            return redirect("hub-home")
+            messages.success(
+                req, f"Account has been created for {username}! Please log in.")
+            return redirect("login")
     else:
         form = UserRegisterForm()
 
