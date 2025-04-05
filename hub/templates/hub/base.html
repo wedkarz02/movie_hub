@@ -36,6 +36,16 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'hub-about' %}">About</a>
                     </li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+                        </li>
+                        {% if user.is_superuser %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'admin:index' %}">Dashboard</a>
+                            </li>
+                        {% endif %}
+                    {% endif %}
                 </ul>
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     {% if user.is_authenticated %}
