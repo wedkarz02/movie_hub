@@ -15,4 +15,6 @@ urlpatterns = [
          name="hub-movie-delete"),
     path("movies/<int:pk>/delete-rating/", views.delete_rating,
          name="hub-movie-delete-rating"),
+    path("movies/<int:pk>/summarize-movie-description/", views.summarize_movie_description,
+         name="hub-summarize-description"),
 ]

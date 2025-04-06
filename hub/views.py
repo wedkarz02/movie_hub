@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -116,6 +117,31 @@ def delete_rating(request, pk):
         rating.delete()
 
     return redirect('hub-movie-details', pk=movie.id)
+
+
+@login_required
+def summarize_movie_description(req, pk):
+    movie = get_object_or_404(Movie, id=pk)
+    try:
+        from together import Together
+
+        client = Together()
+        response = client.chat.completions.create(
+            model="meta-llama/Llama-3.3-70B-Instruct-Turbo-Free",
+            messages=[
+                {"role": "user", "content": f"Write a description of this movie: {movie}. Make it between at least 300 characters long. Make sure it's different every time I ask."}],
+        )
+        new_description = response.choices[0].message.content.strip()
+        movie.description = new_description
+        movie.save()
+
+        if 'HX-Request' in req.headers:
+            return render(req, 'hub/partials/description_part.html', {'movie': movie})
+        else:
+            return JsonResponse({'status': 'success', 'new_description': new_description})
+
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)})
 
 
 counter = {
