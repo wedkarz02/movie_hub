@@ -1,0 +1,22 @@
+{% extends "hub/base.html" %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1 class="mb-4">{{ movie.title }}</h1>
+        <p class="text-muted">Year: {{ movie.year }}</p>
+        <p class="text-muted">Last Updated: {{ movie.updated_at|date:"F j, Y, g:i a" }}</p>
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Description</h5>
+                <p class="card-text">{{ movie.description }}</p>
+            </div>
+        </div>
+        {% if user.is_superuser %}
+            <div class="d-flex justify-content-end">
+                <a href="{% url 'hub-movie-update' movie.id %}" class="btn btn-dark me-2">Update Movie</a>
+                <a href="{% url 'hub-movie-delete' movie.id %}" class="btn btn-danger me-2">Delete Movie</a>
+            </div>
+        {% endif %}
+        <a href="{% url 'hub-movies' %}" class="btn btn-dark mt-4">Back to Movie Library</a>
+    </div>
+{% endblock content %}

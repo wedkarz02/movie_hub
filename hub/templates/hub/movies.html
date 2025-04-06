@@ -1,13 +1,33 @@
 {% extends "hub/base.html" %}
 
 {% block content %}
-    <h1>Movies</h1>
-    {% for movie in movies %}
-        <div class="mt-5">
-            <h3>{{ movie.title }}</h3>
-            <p>{{ movie.description }}</p>
-            <p>{{ movie.year }}</p>
-            <p>{{ movie.updated_at }}</p>
-        </div>
-    {% endfor %}
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <h1>Movie Library</h1>
+        {% if user.is_superuser %}
+            <a href="{% url 'hub-movies-create' %}" class="btn btn-dark text-white">Add New Movie</a>
+        {% endif %}
+    </div>
+
+    <div class="row">
+        {% for movie in movies %}
+            <div class="col-md-4 mb-4">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <a href="{% url 'hub-movie-details' movie.id %}" class="nav-link">{{ movie.title }}</a>
+                        </h4>
+                        <p class="card-text text-muted">Year: {{ movie.year }}</p>
+                        {% if user.is_superuser %}
+                            <div class="d-flex justify-content-end">
+                                <a href="{% url 'hub-movie-update' movie.id %}" class="btn btn-dark me-2">Update</a>
+                                <a href="{% url 'hub-movie-delete' movie.id %}" class="btn btn-danger me-2">Delete</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>No movies available.</p>
+        {% endfor %}
+    </div>
 {% endblock content %}

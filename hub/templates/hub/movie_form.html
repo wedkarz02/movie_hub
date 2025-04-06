@@ -1,0 +1,23 @@
+{% extends "hub/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card bg-white">
+            <div class="card-header bg-dark text-white">
+                Movie
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    <fieldset>
+                        {{ form|crispy }}
+                    </fieldset>
+                    <button type="submit" class="btn btn-dark">Create</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

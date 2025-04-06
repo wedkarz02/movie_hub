@@ -1,0 +1,13 @@
+{% extends 'hub/base.html' %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1>Delete Movie: {{ movie.title }}</h1>
+        <p>Are you sure you want to delete this movie? This action cannot be undone.</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Yes, delete</button>
+            <a href="{% url 'hub-movie-details' movie.id %}" class="btn btn-dark">No, cancel</a>
+        </form>
+    </div>
+{% endblock %}
