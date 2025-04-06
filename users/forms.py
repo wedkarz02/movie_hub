@@ -38,7 +38,8 @@ class RatingForm(forms.ModelForm):
                 'min': 1,
                 'max': 10,
                 'step': 1,
-                'placeholder': 'Rate from 1 to 10'
+                'placeholder': 'Rate from 1 to 10',
+                'style': 'width: 200px; height: 40px;'
             })
         }
 

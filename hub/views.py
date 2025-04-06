@@ -1,4 +1,5 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
@@ -104,6 +105,17 @@ class MovieDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         messages.warning(
             self.request, "You are not authorized to view this page.")
         return redirect("hub-home")
+
+
+@login_required
+def delete_rating(request, pk):
+    movie = get_object_or_404(Movie, id=pk)
+    rating = Rating.objects.filter(movie=movie, user=request.user).first()
+
+    if rating:
+        rating.delete()
+
+    return redirect('hub-movie-details', pk=movie.id)
 
 
 counter = {
