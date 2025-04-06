@@ -17,6 +17,19 @@
                             <a href="{% url 'hub-movie-details' movie.id %}" class="nav-link">{{ movie.title }}</a>
                         </h4>
                         <p class="card-text text-muted">Year: {{ movie.year }}</p>
+
+                        <p class="card-text">
+                            Average Rating: 
+                            {% if movie.avg_rating %}
+                                {{ movie.avg_rating|floatformat:2 }}
+                            {% else %}
+                                No ratings yet
+                            {% endif %}
+                            {% if movie.user_rating %}
+                                <br>Your Rating: {{ movie.user_rating }}
+                            {% endif %}
+                        </p>
+
                         {% if user.is_superuser %}
                             <div class="d-flex justify-content-end">
                                 <a href="{% url 'hub-movie-update' movie.id %}" class="btn btn-dark me-2">Update</a>

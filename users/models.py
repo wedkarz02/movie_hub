@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from PIL import Image
+from hub.models import Movie
 
 
 class Profile(models.Model):
@@ -17,3 +18,6 @@ class Profile(models.Model):
 
     def __str__(self):
         return f"{self.user.username} Profile"
+
+    def rated_movies(self):
+        return Movie.objects.filter(rating__user=self.user).distinct()

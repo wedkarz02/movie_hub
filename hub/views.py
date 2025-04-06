@@ -2,7 +2,9 @@ from django.shortcuts import redirect, render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
-from hub.models import Movie
+from django.db.models import Avg
+from hub.models import Movie, Rating
+from users.forms import RatingForm
 
 
 class MovieListView(ListView):
@@ -11,10 +13,55 @@ class MovieListView(ListView):
     context_object_name = "movies"
     ordering = ["-updated_at"]
 
+    def get_queryset(self):
+        qs = super().get_queryset().annotate(
+            avg_rating=Avg('rating__score')).order_by("-avg_rating")
+        if self.request.user.is_authenticated:
+            user_ratings = Rating.objects.filter(user=self.request.user)
+            user_rating_dict = {r.movie_id: r.score for r in user_ratings}
+            for movie in qs:
+                movie.user_rating = user_rating_dict.get(movie.id)
+        return qs
+
 
 class MovieDetailView(DetailView):
     model = Movie
     template_name = "hub/movie_details.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        movie = self.object
+
+        avg = movie.rating_set.aggregate(Avg('score'))['score__avg']
+        context['avg_rating'] = round(avg, 2) if avg else "No ratings yet"
+
+        if self.request.user.is_authenticated:
+            rating = Rating.objects.filter(
+                user=self.request.user, movie=movie).first()
+            context['rating_form'] = RatingForm(instance=rating)
+            context['user_rating'] = rating.score if rating else None
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if not request.user.is_authenticated:
+            return redirect('login')
+
+        form = RatingForm(request.POST)
+        if form.is_valid():
+            score = form.cleaned_data['score']
+            rating, created = Rating.objects.update_or_create(
+                user=request.user,
+                movie=self.object,
+                defaults={'score': score}
+            )
+            return redirect(self.object.get_absolute_url())
+        else:
+            print("Rating form errors:", form.errors)
+            context = self.get_context_data()
+            context['rating_form'] = form
+            return self.render_to_response(context)
 
 
 class MovieCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):

@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
+from django.db.models import Subquery, OuterRef, Avg
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from hub.models import Rating
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 
 
@@ -35,9 +37,18 @@ def profile(req):
         u_form = UserUpdateForm(instance=req.user)
         p_form = ProfileUpdateForm(instance=req.user.profile)
 
+    rated = req.user.profile.rated_movies().annotate(
+        user_score=Subquery(
+            Rating.objects.filter(user=req.user, movie=OuterRef('pk'))
+            .values('score')[:1]
+        ),
+        avg_rating=Avg('rating__score')
+    )
+
     context = {
         "u_form": u_form,
         "p_form": p_form,
+        "rated_movies": rated,
         "title": req.user.profile
     }
 
