@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.db.models import Avg
 from hub.models import Movie, Rating
 from users.forms import RatingForm
+from together import Together
 
 
 class MovieListView(ListView):
@@ -123,7 +124,7 @@ def delete_rating(request, pk):
 def summarize_movie_description(req, pk):
     movie = get_object_or_404(Movie, id=pk)
     try:
-        from together import Together
+        # from together import Together
 
         client = Together()
         response = client.chat.completions.create(

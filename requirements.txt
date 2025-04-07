@@ -1,3 +1,5 @@
 Django==4.2.20
 crispy-bootstrap5==2025.4
+django-crispy-forms>=1.14.0
 Pillow==11.1.0
+together==1.5.5
