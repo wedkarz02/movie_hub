@@ -24,13 +24,19 @@
                     <button id="summarize-btn" class="btn btn-dark" 
                         hx-get="{% url 'hub-summarize-description' movie.id %}" 
                         hx-target="#movie-description" 
-                        hx-swap="outerHTML" 
-                        hx-indicator="#loading-spinner">
+                        hx-swap="outerHTML">
                             Summarize
                     </button>
                 {% endif %}
             </div>
         </div>
+
+        <script>
+            document.addEventListener("refreshPage", () => {
+                window.location.reload();
+            });
+        </script>
+
         {% if user.is_authenticated %}
             <div class="card shadow mt-5" style="max-width: 400px;">
                 <div class="card-body">

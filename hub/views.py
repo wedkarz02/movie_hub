@@ -124,8 +124,6 @@ def delete_rating(request, pk):
 def summarize_movie_description(req, pk):
     movie = get_object_or_404(Movie, id=pk)
     try:
-        # from together import Together
-
         client = Together()
         response = client.chat.completions.create(
             model="meta-llama/Llama-3.3-70B-Instruct-Turbo-Free",
@@ -137,9 +135,12 @@ def summarize_movie_description(req, pk):
         movie.save()
 
         if 'HX-Request' in req.headers:
-            return render(req, 'hub/partials/description_part.html', {'movie': movie})
+            res = render(req, 'hub/partials/description_part.html',
+                         {'movie': movie})
+            res["HX-Trigger"] = "refreshPage"
+            return res
         else:
-            return JsonResponse({'status': 'success', 'new_description': new_description})
+            return redirect(req, "hub-movie-details", pk=pk)
 
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': str(e)})
