@@ -75,6 +75,12 @@ $ venv/bin/python3 manage.py runserver
 
 With default configuration, the server is live on ```http://127.0.0.1:8000```.
 
+Optionally you can populate the database with movies from the ```movies.json``` file:
+
+```bash
+$ venv/bin/python3 manage.py load_movies movies.json
+```
+
 If you'd like to change the default profile picture for new users, swap the ```media/default.jpg``` file for your image (needs to be named ```default.jpg``` and be located in ```media``` directory).
 
 ### License
