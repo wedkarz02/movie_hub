@@ -146,18 +146,8 @@ def summarize_movie_description(req, pk):
         return JsonResponse({'status': 'error', 'message': str(e)})
 
 
-counter = {
-    "num": 0
-}
-
-
 def home(req):
-    counter["num"] += 1
-    context = {
-        "counter": counter,
-    }
-
-    return render(req, "hub/home.html", context)
+    return render(req, "hub/home.html")
 
 
 def about(req):
